@@ -1,0 +1,10 @@
+.idea/
+.nyc_output/
+node_modules/
+/lib/
+/artifacts/
+/out/
+bundle.js
+bundle.js.map
+npm-debug.log
+yarn-error.log

@@ -1,0 +1,108 @@
+{
+  "name": "theia-workflow-debug",
+  "keywords": [
+    "theia-extension"
+  ],
+  "version": "0.0.0",
+  "files": [
+    "out",
+    "src"
+  ],
+  "dependencies": {
+    "vscode-debugadapter": "^1.32.0",
+    "await-notify": "^1.0.1",
+    "@types/vscode": "^1.34.0"
+  },
+  "devDependencies": {
+    "rimraf": "^2.6.1",
+    "tslint": "^5.5.0",
+    "typescript": "3.4.3"
+  },
+  "scripts": {
+    "prepare": "yarn run clean && yarn run build",
+    "clean": "rimraf lib",
+    "build": "tsc && yarn run lint",
+    "lint": "tslint -c ../../configs/tslint.json --project ./tsconfig.json",
+    "watch": "tsc -w"
+  },
+  "activationEvents": [
+    "onDebug"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "debuggers": [
+      {
+        "type": "workflow-debug",
+        "label": "Theia Worflow Debug",
+        "program": "./out/workflow-debug.js",
+        "runtime": "node",
+        "configurationAttributes": {
+          "launch": {
+            "required": [
+              "program"
+            ],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "Absolute path to a text file.",
+                "default": "${workspaceFolder}/${file}"
+              },
+              "stopOnEntry": {
+                "type": "boolean",
+                "description": "Automatically stop after launch.",
+                "default": true
+              },
+              "connectType": {
+                "type": "string",
+                "description": "Type of connection to the Debugger",
+                "default": "sockets"
+              },
+              "serverPort": {
+                "type": "number",
+                "description": "Number of the server port to connect to.",
+                "default": 5056
+              },
+              "serverHost": {
+                "type": "string",
+                "description": "Name of the server host to connect to.",
+                "default": "127.0.0.1"
+              },
+              "serverBase": {
+                "type": "string",
+                "description": "Server base path.",
+                "default": ""
+              },
+              "trace": {
+                "type": "boolean",
+                "description": "Enable logging of the Debug Adapter Protocol.",
+                "default": true
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "type": "workflow-debug",
+            "request": "launch",
+            "name": "Debugging a text file",
+            "program": "${file}",
+            "stopOnEntry": true
+          }
+        ],
+        "configurationSnippets": [
+          {
+            "label": "Theia Workflow Debug: Launch",
+            "description": "A new configuration for launching a Theia workflow debug program",
+            "body": {
+              "type": "workflow-debug",
+              "request": "launch",
+              "name": "Debugging a text file",
+              "stopOnEntry": true,
+              "program": "^\"\\${file}\""
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
